@@ -1,0 +1,102 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "GromovMilman"
+  description: >-
+    Formalization of Theorem 1 (the Gromov–Milman conjecture on polynomials restricted to subspaces)
+    from Dol'nikov–Karasev, "Dvoretzky type theorems for multivariate polynomials and sections of
+    convex bodies" (arXiv:1009.0392): for any even d > 0 and any k, there exists n(d, k) such that
+    every homogeneous polynomial of degree d on R^n (n >= n(d, k)) restricts on some k-dimensional
+    subspace V to a scalar multiple of (x_1^2 + ... + x_n^2)^(d/2).
+    The formalization provides an unconditional, constructive proof without sorry or external topological
+    black boxes: Carlsson's theorem on non-abelian 2-groups is eliminated in favor of an elementary abelian
+    Dold-type Borsuk–Ulam theorem ((Z/2)^r) proved from scratch on chain complexes and applied inductively
+    level-by-level to iterated wreath products via block-structured join embeddings.
+  authors:
+    - "Arseniy Akopyan"
+  responsible_maintainers:
+    - "Arseniy Akopyan"
+  license: "Apache-2.0"
+
+classification:
+  arxiv: ["math.MG", "math.DG", "math.AT", "math.CO"]
+  msc2020: ["52A20", "55M20", "55M35", "14P99"]
+
+sources:
+  - title: "Dvoretzky type theorems for multivariate polynomials and sections of convex bodies"
+    authors:
+      - "Dol'nikov, Vladimir L."
+      - "Karasev, Roman N."
+    id: "arXiv:1009.0392 [math.MG]"
+    type: "article"
+    location: "https://arxiv.org/abs/1009.0392"
+    relationship: "formalizes"
+    license: "arXiv.org perpetual non-exclusive"
+    author_endorsement: "participated"
+
+related_formalizations: []
+
+status:
+  scope: >-
+    Theorem 1 of Dol'nikov–Karasev (the Gromov–Milman conjecture) is proven completely without sorry,
+    conditioned on no non-standard axioms (only propext, Quot.sound, Classical.choice).
+    Both Challenge.lean and Solution.lean match verbatim and are audited and approved by leanprover/comparator.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "theorem1"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+      literature_dependencies: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["aristotle"]
+      framework: "Aristotle"
+      tool_setup: "AI-assisted formalization in Lean 4 with Mathlib using Aristotle."
+      cost:
+        wall_time: "several weeks"
+        spend_usd: "subscription-based"
+        hardware: "cloud-based API"
+      prompting_notes: "n/a"
+  spend_usd: "subscription-based"
+  notes: "The formalization was prepared by Arseniy Akopyan with assistance of Aristotle."
+
+fidelity:
+  divergences: >-
+    The formalized proof differs mathematically from the paper's original proof in five fundamental ways:
+    (1) Elimination of Carlsson's theorem and stable cohomotopy: The paper quotes Lemma 1 from the
+    literature for general (non-abelian) 2-groups, requiring Gunnar Carlsson's theorem (Segal conjecture)
+    and equivariant stable cohomotopy. In this formalization, Lemma 1 is proven from scratch, but only
+    for elementary abelian 2-groups (Z/2)^r, using explicit chain complexes, barycentric subdivision,
+    simplicial approximation, and the integral domain property of F_2[U_1, ..., U_r].
+    (2) Level-by-level wreath induction: The paper applies Lemma 1 once to the full signed permutation
+    group (Z/2)^X \rtimes H. The formalization decomposes H into an iterated wreath product K_1 \wr ... \wr K_\delta
+    of elementary abelian 2-groups and applies Lemma 1 level-by-level (achievable_step). Invariance established
+    at earlier levels is preserved because the join embedding is block-structured.
+    (3) Concrete join spaces instead of Stiefel manifolds: The paper uses high connectivity of Stiefel
+    manifolds V_m(R^n). The formalization uses the N-fold join G * ... * G with an explicit isometric
+    embedding into orthogonal blocks, avoiding Stiefel homotopy groups.
+    (4) Averaging lemma on separate degrees: The paper scales polynomials with mixed degrees by powers of Q
+    to a single degree. The formalization treats each homogeneous degree separately and composes the resulting
+    families of similarities, avoiding scale-factor discrepancies in convex weights.
+    (5) Target discretization: The polynomial space is represented by values on a finite grid rather than
+    an abstract infinite-dimensional vector space.
+
+review:
+  status: "self-assessed"
+  reviewers: []
+  notes: "Verified with Lean 4 default kernel via leanprover/comparator on Lean v4.35.0."
+
+alignment:
+  statements:
+    - source: "Dol'nikov–Karasev (arXiv:1009.0392), Theorem 1"
+      lean: "theorem1"
+      module: "Challenge"
+      status: "proved"
+      note: "Gromov–Milman conjecture on polynomials restricted to subspaces"
